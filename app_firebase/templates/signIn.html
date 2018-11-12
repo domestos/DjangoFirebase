@@ -1,0 +1,23 @@
+{% if massage %}
+  <script>
+    alert('{{massage}}')
+  </script>
+{% endif %}
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Sign In</title>
+  </head>
+  <body>
+      <form class="" action="postsign" method="post">
+          {% csrf_token %}
+          Email:
+          <input type="email" name="email">
+          Password:
+          <input type="password" name="password">
+          <input type="submit" value="signIn">
+      </form>
+  </body>
+</html>
