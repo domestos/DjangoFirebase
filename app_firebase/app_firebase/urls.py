@@ -22,4 +22,9 @@ urlpatterns = [
     path('',sinIn),
     path('postsign',postsign),
     path('logout',logout, name='log'),
+    path('signup',signUp, name='signup'),
+    path('postsignup',postsignup),
+    path('createreport',createreport),
+    path('postcreatereport',postcreatereport),
+
 ]

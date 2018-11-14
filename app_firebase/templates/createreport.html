@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Create report</title>
+  </head>
+  <body>
+    <h1>Create report</h1>
+      <form class="" action="postcreatereport" method="post">
+          {% csrf_token %}
+          Work Assigned:<br>
+          <input type="text" name="work"> <br>
+          Progres:<br>
+          <textarea name="progress" rows="8" cols="80"> </textarea><br>
+          <input type="submit" value="Submit">
+
+      </form>
+  </body>
+</html>
