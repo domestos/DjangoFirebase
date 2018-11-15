@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import *
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,8 @@ urlpatterns = [
     path('signup',signUp, name='signup'),
     path('postsignup',postsignup),
     path('createreport',createreport),
-    path('postcreatereport',postcreatereport),
+    path('post_create_report',post_create_report),
+    path('check_report',check_report),
+    url(r'^post_check/',post_check, name='post_check'),
 
 ]

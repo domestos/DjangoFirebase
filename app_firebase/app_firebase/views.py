@@ -2,6 +2,7 @@ from django.shortcuts import render
 import pyrebase
 from django.contrib import auth
 
+
 config = {
     'apiKey': "AIzaSyAsHr9i_UJL3ndSXHsD_PAqKGa8elOXKX8",
     'authDomain': "items-18814.firebaseapp.com",
@@ -60,7 +61,7 @@ def createreport(request):
     return render(request, 'createreport.html')
 
 
-def postcreatereport(request):
+def post_create_report(request):
     import time
     from datetime import datetime, timezone
     import pytz
@@ -83,3 +84,53 @@ def postcreatereport(request):
     database.child('users').child(a).child('reports').child(milis).set(data)
     name = database.child('users').child(a).child('details').child('name').get().val()
     return render(request, 'welcome.html',{'e':name})
+
+
+def check_report(request):
+    import datetime
+    idToken = request.session['uid']
+    a = authe.get_account_info(idToken)
+    a = a['users']
+    a = a[0]
+    a = a ['localId']
+    timestamps = database.child('users').child(a).child('reports').shallow().get().val()
+    lis_times = []
+    #careate array with times and sort it
+    for i in timestamps:
+        lis_times.append(i)
+    lis_times.sort(reverse=True)
+    #get  works from times
+    works = []
+    for i in lis_times:
+        work = database.child("users").child(a).child('reports').child(i).child('work').get().val()
+        works.append(work)
+
+    print(timestamps)
+    print(works)
+    date = []
+    for i in lis_times:
+        i = float(i)
+        d = datetime.datetime.fromtimestamp(i).strftime('%H:%M %d-%m-%Y')
+        date.append(d)
+
+    comb_lis = zip(lis_times, date, works)
+    name = database.child('users').child(a).child('details').child('name').get().val()
+    print(comb_lis)
+    #return render(request, "welcome.html", {'comb_lis':comb_lis,'e':name })
+    return render(request, "checkreport.html", {'comb_lis':comb_lis,'e':name })
+
+
+def post_check(request):
+    import datetime
+    time = request.GET.get('z')
+    idToken = request.session['uid']
+    a = authe.get_account_info(idToken)
+    a = a['users']
+    a = a[0]
+    a = a ['localId']
+    print("HELLO")
+    work = database.child('users').child(a).child('reports').child(time).child('work').get().val()
+    progress = database.child('users').child(a).child('reports').child(time).child('progress').get().val()
+    i = float(time)
+    d = datetime.datetime.fromtimestamp(i).strftime('%H:%M %d-%m-%Y')
+    return render(request, 'post_check.html', {'work':work, 'progress':progress,'date':d})
