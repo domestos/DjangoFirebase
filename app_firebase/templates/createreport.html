@@ -12,8 +12,47 @@
           <input type="text" name="work"> <br>
           Progres:<br>
           <textarea name="progress" rows="8" cols="80"> </textarea><br>
+          <input type="file" name="file[]" id="file" value="">
+          <input type="hidden" name="url" id="url" value="">
+          <button type="button" onclick="uploadimage()" name="button">Upload</button><br>
           <input type="submit" value="Submit">
 
       </form>
   </body>
+
+  <script  type="text/javascript" src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js">
+
+  </script>
+  <script >
+
+
+      function uploadimage(){
+        var config = {
+            apiKey: "AIzaSyAsHr9i_UJL3ndSXHsD_PAqKGa8elOXKX8",
+            authDomain: "items-18814.firebaseapp.com",
+            databaseURL: "https://items-18814.firebaseio.com",
+            projectId: "items-18814",
+            storageBucket: "items-18814.appspot.com",
+            messagingSenderId: "400494160334"
+          };
+        firebase.initializeApp(config);
+        
+          var file  =document.getElementById("file").files[0];
+          var storageRef = storage.ref();
+          var thisref= storageRef.child('file.name').put(file)
+          thisref.on('state_changed', function(snapshot){
+            console.log("file uploaded succesfully");
+          }, function(error){
+            console.log(error);
+          }, function(){
+            var downloadURL = thisref.asapshot.downloadURL;
+            console.log("got url");
+            alert("file uploaded succesfully");
+          });
+      }
+      var storage = firebase.storage();
+
+
+
+  </script>
 </html>
