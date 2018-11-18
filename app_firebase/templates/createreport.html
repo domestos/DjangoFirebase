@@ -24,19 +24,20 @@
 
   </script>
   <script >
+      var config = {
+          apiKey: "AIzaSyAsHr9i_UJL3ndSXHsD_PAqKGa8elOXKX8",
+          authDomain: "items-18814.firebaseapp.com",
+          databaseURL: "https://items-18814.firebaseio.com",
+          projectId: "items-18814",
+          storageBucket: "items-18814.appspot.com",
+          messagingSenderId: "400494160334"
+        };
+
+      firebase.initializeApp(config);
 
 
       function uploadimage(){
-        var config = {
-            apiKey: "AIzaSyAsHr9i_UJL3ndSXHsD_PAqKGa8elOXKX8",
-            authDomain: "items-18814.firebaseapp.com",
-            databaseURL: "https://items-18814.firebaseio.com",
-            projectId: "items-18814",
-            storageBucket: "items-18814.appspot.com",
-            messagingSenderId: "400494160334"
-          };
-        firebase.initializeApp(config);
-        
+          var storage = firebase.storage();
           var file  =document.getElementById("file").files[0];
           var storageRef = storage.ref();
           var thisref= storageRef.child('file.name').put(file)
@@ -45,12 +46,14 @@
           }, function(error){
             console.log(error);
           }, function(){
-            var downloadURL = thisref.asapshot.downloadURL;
-            console.log("got url");
-            alert("file uploaded succesfully");
+              console.log("get url");
+              var downloadURL = thisref.snapshot.downloadURL;
+              console.log(downloadURL);
+              document.getElementById("url").value = downloadURL;
+              alert("file uploaded succesfully");
           });
       }
-      var storage = firebase.storage();
+
 
 
 

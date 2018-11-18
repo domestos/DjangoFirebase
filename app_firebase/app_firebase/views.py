@@ -9,7 +9,8 @@ config = {
     'databaseURL': "https://items-18814.firebaseio.com",
     'projectId': "items-18814",
     'storageBucket': "items-18814.appspot.com",
-    'messagingSenderId': "400494160334"
+    'messagingSenderId': "400494160334",
+    'serviceAccount':"app_firebase/items-18814-firebase-adminsdk-393ej-d3deee2300.json"
   };
 firebase = pyrebase.initialize_app(config)
 authe = firebase.auth()
@@ -71,6 +72,7 @@ def post_create_report(request):
 
     work = request.POST.get('work')
     progress = request.POST.get('progress')
+    url =  request.POST.get('url')
     idToken = request.session['uid']
     a = authe.get_account_info(idToken)
     a = a['users']
@@ -79,7 +81,8 @@ def post_create_report(request):
     print(str(a))
     data = {
         'work':work,
-        'progress':progress
+        'progress':progress,
+        'url':url
     }
     database.child('users').child(a).child('reports').child(milis).set(data)
     name = database.child('users').child(a).child('details').child('name').get().val()
@@ -115,6 +118,7 @@ def check_report(request):
 
     comb_lis = zip(lis_times, date, works)
     name = database.child('users').child(a).child('details').child('name').get().val()
+
     print(comb_lis)
     #return render(request, "welcome.html", {'comb_lis':comb_lis,'e':name })
     return render(request, "checkreport.html", {'comb_lis':comb_lis,'e':name })
@@ -131,6 +135,8 @@ def post_check(request):
     print("HELLO")
     work = database.child('users').child(a).child('reports').child(time).child('work').get().val()
     progress = database.child('users').child(a).child('reports').child(time).child('progress').get().val()
+    img_url = database.child('users').child(a).child('reports').child(time).child('url').get().val()
+
     i = float(time)
     d = datetime.datetime.fromtimestamp(i).strftime('%H:%M %d-%m-%Y')
-    return render(request, 'post_check.html', {'work':work, 'progress':progress,'date':d})
+    return render(request, 'post_check.html', {'work':work, 'progress':progress,'date':d, 'img':img_url})
